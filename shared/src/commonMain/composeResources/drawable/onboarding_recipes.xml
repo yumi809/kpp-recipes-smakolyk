@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="240dp"
+    android:height="240dp"
+    android:viewportWidth="240"
+    android:viewportHeight="240">
+    <!-- background blob -->
+    <path android:fillColor="#F7C59F" android:pathData="M120,20a100,100 0,1 1,0 200a100,100 0,1 1,0 -200z" />
+    <!-- plate -->
+    <path android:fillColor="#FFFFFF" android:pathData="M120,62a58,58 0,1 1,0 116a58,58 0,1 1,0 -116z" />
+    <path android:fillColor="#F5E9DC" android:pathData="M120,80a40,40 0,1 1,0 80a40,40 0,1 1,0 -80z" />
+    <!-- salad leaves -->
+    <path android:fillColor="#4F772D" android:pathData="M96,118c8,-20 28,-24 36,-14c-10,2 -22,10 -36,14z" />
+    <path android:fillColor="#B5D98E" android:pathData="M110,132c14,-16 34,-12 38,0c-12,-2 -24,2 -38,0z" />
+    <!-- tomato -->
+    <path android:fillColor="#C8553D" android:pathData="M134,110a10,10 0,1 1,0 20a10,10 0,1 1,0 -20z" />
+    <path android:fillColor="#C8553D" android:pathData="M104,128a8,8 0,1 1,0 16a8,8 0,1 1,0 -16z" />
+    <!-- fork -->
+    <path android:fillColor="#6B5048" android:pathData="M44,70h4v34h-4zM52,70h4v34h-4zM60,70h4v34h-4zM44,104h20v8h-20zM50,112h8v64h-8z" />
+    <!-- knife -->
+    <path android:fillColor="#6B5048" android:pathData="M186,70c10,8 10,40 0,48v58h-8v-106z" />
+</vector>

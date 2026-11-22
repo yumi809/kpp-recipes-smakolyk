@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Смаколик</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">Пропустити</string>
+    <string name="onboarding_next">Далі</string>
+    <string name="onboarding_start">Почати готувати</string>
+    <string name="onboarding_page_indicator">Сторінка %1$d з %2$d</string>
+
+    <string name="onboarding_1_title">Сотні рецептів</string>
+    <string name="onboarding_1_text">Від швидких сніданків до святкових вечерь — знайдіть страву під будь-який настрій і будь-який холодильник.</string>
+    <string name="onboarding_2_title">Готуйте крок за кроком</string>
+    <string name="onboarding_2_text">Зрозумілі інструкції, список інгредієнтів і час приготування допоможуть усе вдасться з першого разу.</string>
+    <string name="onboarding_3_title">Зберігайте улюблене</string>
+    <string name="onboarding_3_text">Додавайте рецепти, які сподобались, щоб вони завжди були під рукою.</string>
+    <string name="onboarding_4_title">На старт, увага, готуємо!</string>
+    <string name="onboarding_4_text">Увійдіть, і Смаколик стане вашим щоденним помічником на кухні.</string>
+
+    <!-- Home placeholder -->
+    <string name="home_title">Ласкаво просимо до Смаколика</string>
+    <string name="home_text">Рецепти зовсім скоро. А поки що можна ще раз переглянути знайомство з застосунком.</string>
+    <string name="home_replay_onboarding">Показати знайомство ще раз</string>
+</resources>

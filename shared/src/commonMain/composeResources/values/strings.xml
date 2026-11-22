@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Smakolyk</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_start">Start cooking</string>
+    <string name="onboarding_page_indicator">Page %1$d of %2$d</string>
+
+    <string name="onboarding_1_title">Hundreds of recipes</string>
+    <string name="onboarding_1_text">From quick breakfasts to festive dinners — find a dish for any mood and any fridge.</string>
+    <string name="onboarding_2_title">Cook step by step</string>
+    <string name="onboarding_2_text">Clear instructions, ingredient lists and cooking time help you get it right the first time.</string>
+    <string name="onboarding_3_title">Keep your favourites</string>
+    <string name="onboarding_3_text">Save the recipes you love so they are always one tap away.</string>
+    <string name="onboarding_4_title">Ready, set, cook!</string>
+    <string name="onboarding_4_text">Sign in and let Smakolyk become your everyday kitchen companion.</string>
+
+    <!-- Home placeholder -->
+    <string name="home_title">Welcome to Smakolyk</string>
+    <string name="home_text">Recipes are coming soon. For now you can replay the introduction.</string>
+    <string name="home_replay_onboarding">Show introduction again</string>
+</resources>

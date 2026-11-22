@@ -1,0 +1,19 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="240dp"
+    android:height="240dp"
+    android:viewportWidth="240"
+    android:viewportHeight="240">
+    <path android:fillColor="#FFB4A1" android:pathData="M120,20a100,100 0,1 1,0 200a100,100 0,1 1,0 -200z" />
+    <!-- chef hat puffs -->
+    <path android:fillColor="#FFFFFF" android:pathData="M88,70a26,26 0,1 1,0 52a26,26 0,1 1,0 -52z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M152,70a26,26 0,1 1,0 52a26,26 0,1 1,0 -52z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M120,52a32,32 0,1 1,0 64a32,32 0,1 1,0 -64z" />
+    <!-- hat band -->
+    <path android:fillColor="#FFFFFF" android:pathData="M80,100h80v56h-80z" />
+    <path android:fillColor="#F5E9DC" android:pathData="M80,140h80v16h-80z" />
+    <!-- spoon -->
+    <path android:fillColor="#4F772D" android:pathData="M164,150a12,16 0,1 1,24 0a12,16 0,1 1,-24 0z" />
+    <path android:fillColor="#4F772D" android:pathData="M172,164h8v34h-8z" />
+    <!-- sparkles -->
+    <path android:fillColor="#F2A541" android:pathData="M58,160l6,12l12,6l-12,6l-6,12l-6,-12l-12,-6l12,-6z" />
+</vector>

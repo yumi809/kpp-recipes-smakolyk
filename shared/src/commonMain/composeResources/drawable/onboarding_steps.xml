@@ -1,0 +1,19 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="240dp"
+    android:height="240dp"
+    android:viewportWidth="240"
+    android:viewportHeight="240">
+    <path android:fillColor="#B5D98E" android:pathData="M120,20a100,100 0,1 1,0 200a100,100 0,1 1,0 -200z" />
+    <!-- steam -->
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="6" android:strokeLineCap="round"
+        android:pathData="M96,60c-8,10 8,18 0,28M120,52c-8,10 8,18 0,28M144,60c-8,10 8,18 0,28" />
+    <!-- pot body -->
+    <path android:fillColor="#C8553D" android:pathData="M64,104h112v52c0,18 -14,30 -32,30h-48c-18,0 -32,-12 -32,-30z" />
+    <!-- lid -->
+    <path android:fillColor="#9A3B26" android:pathData="M56,96h128v12h-128z" />
+    <path android:fillColor="#9A3B26" android:pathData="M110,86h20v10h-20z" />
+    <!-- handles -->
+    <path android:fillColor="#9A3B26" android:pathData="M44,118h20v12h-20zM176,118h20v12h-20z" />
+    <!-- step dots -->
+    <path android:fillColor="#FFFFFF" android:pathData="M96,140a6,6 0,1 1,0 12a6,6 0,1 1,0 -12zM120,140a6,6 0,1 1,0 12a6,6 0,1 1,0 -12zM144,140a6,6 0,1 1,0 12a6,6 0,1 1,0 -12z" />
+</vector>
