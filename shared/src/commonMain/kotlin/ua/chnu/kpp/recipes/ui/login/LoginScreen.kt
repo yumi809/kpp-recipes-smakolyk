@@ -1,6 +1,12 @@
 package ua.chnu.kpp.recipes.ui.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import ua.chnu.kpp.recipes.ui.common.PaneLayout
+import ua.chnu.kpp.recipes.ui.common.rememberPaneLayout
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -92,7 +98,13 @@ fun LoginRoute(
         }
     }
 
-    LoginScreen(state = state, focus = focus, snackbarHostState = snackbarHostState, onIntent = viewModel::onIntent)
+    LoginScreen(
+        state = state,
+        focus = focus,
+        layout = rememberPaneLayout(),
+        snackbarHostState = snackbarHostState,
+        onIntent = viewModel::onIntent,
+    )
 }
 
 /** Focus requesters for both fields, so effects and keyboard actions can move focus. */
@@ -110,10 +122,43 @@ class LoginFocus {
 internal fun LoginScreen(
     state: LoginState,
     focus: LoginFocus,
+    layout: PaneLayout,
     snackbarHostState: SnackbarHostState,
     onIntent: (LoginIntent) -> Unit,
 ) {
     Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { padding ->
+        if (layout == PaneLayout.TWO) {
+            // Wide window: brand panel on the left, the form on the right.
+            Row(Modifier.fillMaxSize().padding(padding)) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f))
+                        .padding(32.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    LoginHeader()
+                }
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .imePadding()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 40.dp, vertical = 32.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    LoginForm(
+                        state = state,
+                        focus = focus,
+                        onIntent = onIntent,
+                        modifier = Modifier.widthIn(max = 420.dp),
+                    )
+                }
+            }
+            return@Scaffold
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -270,6 +315,7 @@ private fun LoginScreenPreview() {
         LoginScreen(
             state = LoginState(username = "emilys", passwordError = PasswordError.TOO_SHORT),
             focus = remember { LoginFocus() },
+            layout = PaneLayout.SINGLE,
             snackbarHostState = remember { SnackbarHostState() },
             onIntent = {},
         )

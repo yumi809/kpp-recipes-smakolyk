@@ -1,6 +1,11 @@
 package ua.chnu.kpp.recipes.ui.onboarding
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.widthIn
+import ua.chnu.kpp.recipes.ui.common.PaneLayout
+import ua.chnu.kpp.recipes.ui.common.rememberPaneLayout
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -69,11 +74,108 @@ fun OnboardingRoute(
         }
     }
 
-    OnboardingScreen(state = state, pagerState = pagerState, onIntent = viewModel::onIntent)
+    OnboardingScreen(
+        state = state,
+        pagerState = pagerState,
+        layout = rememberPaneLayout(),
+        onIntent = viewModel::onIntent,
+    )
 }
 
 @Composable
 internal fun OnboardingScreen(
+    state: OnboardingState,
+    pagerState: PagerState,
+    layout: PaneLayout,
+    onIntent: (OnboardingIntent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when (layout) {
+        PaneLayout.SINGLE -> SinglePaneOnboarding(state, pagerState, onIntent, modifier)
+        PaneLayout.TWO -> TwoPaneOnboarding(state, pagerState, onIntent, modifier)
+    }
+}
+
+/** Wide window: the swipeable illustration on the left, text and controls on the right. */
+@Composable
+private fun TwoPaneOnboarding(
+    state: OnboardingState,
+    pagerState: PagerState,
+    onIntent: (OnboardingIntent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .safeDrawingPadding(),
+    ) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)),
+        ) { index ->
+            Box(Modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
+                Image(
+                    painter = painterResource(onboardingPages[index].illustration),
+                    contentDescription = null,
+                    modifier = Modifier.sizeIn(maxWidth = 360.dp, maxHeight = 360.dp).fillMaxWidth(0.8f),
+                )
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .padding(horizontal = 40.dp, vertical = 24.dp),
+        ) {
+            Box(Modifier.fillMaxWidth().height(48.dp)) {
+                if (!state.isLastPage) {
+                    TextButton(
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                        onClick = { onIntent(OnboardingIntent.SkipClicked) },
+                    ) { Text(stringResource(Res.string.onboarding_skip)) }
+                }
+            }
+            Crossfade(
+                targetState = onboardingPages[state.currentPage],
+                modifier = Modifier.weight(1f).fillMaxWidth(),
+            ) { page ->
+                Column(verticalArrangement = Arrangement.Center, modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = stringResource(page.title),
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(page.text),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            PagerIndicator(currentPage = state.currentPage, pageCount = state.pageCount)
+            Spacer(Modifier.height(24.dp))
+            Button(
+                modifier = Modifier.widthIn(min = 220.dp).height(56.dp),
+                onClick = { onIntent(OnboardingIntent.NextClicked) },
+            ) {
+                Text(
+                    text = stringResource(if (state.isLastPage) Res.string.onboarding_start else Res.string.onboarding_next),
+                    style = MaterialTheme.typography.labelLarge,
+                )
+            }
+        }
+    }
+}
+
+/** Compact window (phone portrait): one column. */
+@Composable
+private fun SinglePaneOnboarding(
     state: OnboardingState,
     pagerState: PagerState,
     onIntent: (OnboardingIntent) -> Unit,
@@ -184,6 +286,7 @@ private fun OnboardingScreenPreview() {
         OnboardingScreen(
             state = OnboardingState(),
             pagerState = rememberPagerState(pageCount = { onboardingPages.size }),
+            layout = PaneLayout.SINGLE,
             onIntent = {},
         )
     }

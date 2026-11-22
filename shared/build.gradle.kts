@@ -70,6 +70,7 @@ kotlin {
             implementation(libs.ktor.client.auth)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ksafe)
+            implementation(libs.compose.material3.adaptive)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

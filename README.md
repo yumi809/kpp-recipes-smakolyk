@@ -49,6 +49,16 @@ every lab is a separate commit.
 - Tests: `TokenRefreshTest` (Ktor `MockEngine`: refresh + retry, rejected refresh → session cleared).
 - Demo account (dummyjson): `emilys` / `emilyspass`.
 
+## Lab 7 — adaptive layouts with WindowSizeClass
+
+- `ui/common/WindowLayout.kt`: `rememberPaneLayout()` reads `currentWindowAdaptiveInfoV2().windowSizeClass`
+  (`material3-adaptive`) and returns `SINGLE` for compact width and `TWO` from the Material *medium*
+  breakpoint (600 dp).
+- **Onboarding**: compact — one column (pager, indicator, button); wide — swipeable illustration on the left,
+  title / text (cross-fading with the page), indicator and buttons on the right.
+- **Login**: compact — header above the form; wide — brand panel on the left, the form on the right.
+- Try it: resize the desktop window, rotate the phone, or run on a tablet / foldable emulator.
+
 ## Run
 
 - Android: `./gradlew :androidApp:assembleDebug` (or Run in Android Studio)
