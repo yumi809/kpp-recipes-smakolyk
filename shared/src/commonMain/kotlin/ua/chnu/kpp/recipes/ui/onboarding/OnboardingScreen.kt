@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -28,7 +27,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,36 +36,49 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.touchlab.kermit.Logger
-import kotlinx.coroutines.launch
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import ua.chnu.kpp.recipes.resources.Res
 import ua.chnu.kpp.recipes.resources.onboarding_next
 import ua.chnu.kpp.recipes.resources.onboarding_page_indicator
 import ua.chnu.kpp.recipes.resources.onboarding_skip
 import ua.chnu.kpp.recipes.resources.onboarding_start
+import ua.chnu.kpp.recipes.ui.common.CollectEffects
 import ua.chnu.kpp.recipes.ui.theme.SmakolykTheme
 
-private val log = Logger.withTag("Onboarding")
-
+/** Stateful entry: wires the MVI view model to the stateless [OnboardingScreen]. */
 @Composable
-internal fun OnboardingScreen(
-    onFinished: () -> Unit,
-    modifier: Modifier = Modifier,
+fun OnboardingRoute(
+    onNavigateToLogin: () -> Unit,
+    viewModel: OnboardingViewModel = koinViewModel(),
 ) {
-    val pagerState = rememberPagerState(pageCount = { onboardingPages.size })
-    val scope = rememberCoroutineScope()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val pagerState = rememberPagerState(initialPage = state.currentPage, pageCount = { state.pageCount })
 
-    // Pager "get notified" pattern: react to page changes via snapshotFlow.
+    // Pager -> intent: report the page the user settled on.
     LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }.collect { page ->
-            log.d { "Onboarding page selected: ${page + 1}/${onboardingPages.size}" }
+        snapshotFlow { pagerState.settledPage }.collect { viewModel.onIntent(OnboardingIntent.PageSettled(it)) }
+    }
+
+    CollectEffects(viewModel.effects) { effect ->
+        when (effect) {
+            is OnboardingEffect.ScrollToPage -> pagerState.animateScrollToPage(effect.page)
+            OnboardingEffect.NavigateToLogin -> onNavigateToLogin()
         }
     }
 
-    val isLastPage = pagerState.currentPage == onboardingPages.lastIndex
+    OnboardingScreen(state = state, pagerState = pagerState, onIntent = viewModel::onIntent)
+}
 
+@Composable
+internal fun OnboardingScreen(
+    state: OnboardingState,
+    pagerState: PagerState,
+    onIntent: (OnboardingIntent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -76,13 +87,10 @@ internal fun OnboardingScreen(
             .padding(horizontal = 24.dp, vertical = 16.dp),
     ) {
         Box(modifier = Modifier.fillMaxWidth().height(48.dp)) {
-            if (!isLastPage) {
+            if (!state.isLastPage) {
                 TextButton(
                     modifier = Modifier.align(Alignment.CenterEnd),
-                    onClick = {
-                        log.i { "Onboarding skipped on page ${pagerState.currentPage + 1}" }
-                        onFinished()
-                    },
+                    onClick = { onIntent(OnboardingIntent.SkipClicked) },
                 ) {
                     Text(stringResource(Res.string.onboarding_skip))
                 }
@@ -96,23 +104,20 @@ internal fun OnboardingScreen(
             OnboardingPageContent(page = onboardingPages[index])
         }
 
-        PagerIndicator(pagerState = pagerState, modifier = Modifier.align(Alignment.CenterHorizontally))
+        PagerIndicator(
+            currentPage = state.currentPage,
+            pageCount = state.pageCount,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        )
 
         Spacer(Modifier.height(24.dp))
 
         Button(
             modifier = Modifier.fillMaxWidth().height(56.dp),
-            onClick = {
-                if (isLastPage) {
-                    log.i { "Onboarding completed" }
-                    onFinished()
-                } else {
-                    scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
-                }
-            },
+            onClick = { onIntent(OnboardingIntent.NextClicked) },
         ) {
             Text(
-                text = stringResource(if (isLastPage) Res.string.onboarding_start else Res.string.onboarding_next),
+                text = stringResource(if (state.isLastPage) Res.string.onboarding_start else Res.string.onboarding_next),
                 style = MaterialTheme.typography.labelLarge,
             )
         }
@@ -120,7 +125,7 @@ internal fun OnboardingScreen(
 }
 
 @Composable
-private fun OnboardingPageContent(page: OnboardingPage, modifier: Modifier = Modifier) {
+internal fun OnboardingPageContent(page: OnboardingPage, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize().padding(horizontal = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -149,19 +154,15 @@ private fun OnboardingPageContent(page: OnboardingPage, modifier: Modifier = Mod
 }
 
 @Composable
-private fun PagerIndicator(pagerState: PagerState, modifier: Modifier = Modifier) {
-    val description = stringResource(
-        Res.string.onboarding_page_indicator,
-        pagerState.currentPage + 1,
-        pagerState.pageCount,
-    )
+internal fun PagerIndicator(currentPage: Int, pageCount: Int, modifier: Modifier = Modifier) {
+    val description = stringResource(Res.string.onboarding_page_indicator, currentPage + 1, pageCount)
     Row(
         modifier = modifier.semantics { contentDescription = description },
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        repeat(pagerState.pageCount) { index ->
-            val selected = pagerState.currentPage == index
+        repeat(pageCount) { index ->
+            val selected = currentPage == index
             val width by animateDpAsState(if (selected) 28.dp else 10.dp)
             val color by animateColorAsState(
                 if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.35f)
@@ -179,5 +180,11 @@ private fun PagerIndicator(pagerState: PagerState, modifier: Modifier = Modifier
 @Preview
 @Composable
 private fun OnboardingScreenPreview() {
-    SmakolykTheme { OnboardingScreen(onFinished = {}) }
+    SmakolykTheme {
+        OnboardingScreen(
+            state = OnboardingState(),
+            pagerState = rememberPagerState(pageCount = { onboardingPages.size }),
+            onIntent = {},
+        )
+    }
 }

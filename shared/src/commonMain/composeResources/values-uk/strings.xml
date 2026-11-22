@@ -16,8 +16,20 @@
     <string name="onboarding_4_title">На старт, увага, готуємо!</string>
     <string name="onboarding_4_text">Увійдіть, і Смаколик стане вашим щоденним помічником на кухні.</string>
 
-    <!-- Home placeholder -->
-    <string name="home_title">Ласкаво просимо до Смаколика</string>
-    <string name="home_text">Рецепти зовсім скоро. А поки що можна ще раз переглянути знайомство з застосунком.</string>
-    <string name="home_replay_onboarding">Показати знайомство ще раз</string>
+    <!-- Login -->
+    <string name="login_title">З поверненням!</string>
+    <string name="login_subtitle">Увійдіть, щоб побачити рецепти на сьогодні</string>
+    <string name="login_username">Ім’я користувача</string>
+    <string name="login_password">Пароль</string>
+    <string name="login_show_password">Показати пароль</string>
+    <string name="login_hide_password">Приховати пароль</string>
+    <string name="login_sign_in">Увійти</string>
+    <string name="login_demo_hint">Демо-акаунт: emilys / emilyspass</string>
+    <string name="login_form_valid">Усе правильно! Вхід з’явиться в наступній версії.</string>
+
+    <string name="error_username_empty">Введіть ім’я користувача</string>
+    <string name="error_username_short">Ім’я має містити щонайменше %1$d символи</string>
+    <string name="error_username_chars">Дозволені лише латинські літери, цифри та . _ -</string>
+    <string name="error_password_empty">Введіть пароль</string>
+    <string name="error_password_short">Пароль має містити щонайменше %1$d символів</string>
 </resources>

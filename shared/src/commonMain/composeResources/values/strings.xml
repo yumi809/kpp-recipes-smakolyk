@@ -16,8 +16,20 @@
     <string name="onboarding_4_title">Ready, set, cook!</string>
     <string name="onboarding_4_text">Sign in and let Smakolyk become your everyday kitchen companion.</string>
 
-    <!-- Home placeholder -->
-    <string name="home_title">Welcome to Smakolyk</string>
-    <string name="home_text">Recipes are coming soon. For now you can replay the introduction.</string>
-    <string name="home_replay_onboarding">Show introduction again</string>
+    <!-- Login -->
+    <string name="login_title">Welcome back!</string>
+    <string name="login_subtitle">Sign in to see today’s recipes</string>
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="login_show_password">Show password</string>
+    <string name="login_hide_password">Hide password</string>
+    <string name="login_sign_in">Sign in</string>
+    <string name="login_demo_hint">Demo account: emilys / emilyspass</string>
+    <string name="login_form_valid">Looks good! Signing in comes in the next version.</string>
+
+    <string name="error_username_empty">Enter your username</string>
+    <string name="error_username_short">Username must have at least %1$d characters</string>
+    <string name="error_username_chars">Only latin letters, digits and . _ - are allowed</string>
+    <string name="error_password_empty">Enter your password</string>
+    <string name="error_password_short">Password must have at least %1$d characters</string>
 </resources>

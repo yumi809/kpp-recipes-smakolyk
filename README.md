@@ -16,6 +16,20 @@ every lab is a separate commit.
   Skip / Next / Start buttons, page changes observed via `snapshotFlow` and logged.
 - **Localisation**: English (`values`) and Ukrainian (`values-uk`).
 
+## Lab 5 — Navigation 3, Koin, MVI for onboarding, login screen
+
+- **Navigation 3** (`navigation/Route.kt`, `App.kt`): serializable `NavKey`s, `NavDisplay`,
+  per-destination `ViewModelStore`; onboarding is replaced by login in the back stack.
+- **Koin** DI (`di/AppModule.kt`: data / domain / presentation modules, `initKoin()` on every platform).
+- **multiplatform-settings** behind `OnboardingRepository` (`data/local/SettingsOnboardingRepository`).
+- **Onboarding MVI**: `OnboardingState / OnboardingIntent / OnboardingEffect`, `OnboardingViewModel`;
+  use cases `CompleteOnboardingUseCase` (saves result) and `IsOnboardingPassedUseCase`.
+- **Main `AppViewModel`** checks onboarding via the use case and picks the start destination.
+- **Login screen** design + MVI (`ui/login`): validation of username / password (`LoginValidator`),
+  keyboard actions — *Next* on username moves focus to password, *Done* on password = *Sign in* button,
+  show/hide password, focus moves to the first invalid field.
+- Unit tests: `LoginValidatorTest`, `OnboardingUseCasesTest`.
+
 ## Run
 
 - Android: `./gradlew :androidApp:assembleDebug` (or Run in Android Studio)

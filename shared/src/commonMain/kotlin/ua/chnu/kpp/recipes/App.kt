@@ -1,33 +1,46 @@
 package ua.chnu.kpp.recipes
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Preview
-import ua.chnu.kpp.recipes.data.local.UserPreferences
-import ua.chnu.kpp.recipes.ui.home.HomeScreen
-import ua.chnu.kpp.recipes.ui.onboarding.OnboardingScreen
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
+import org.koin.compose.viewmodel.koinViewModel
+import ua.chnu.kpp.recipes.navigation.Route
+import ua.chnu.kpp.recipes.navigation.navSavedStateConfig
+import ua.chnu.kpp.recipes.ui.login.LoginRoute
+import ua.chnu.kpp.recipes.ui.onboarding.OnboardingRoute
 import ua.chnu.kpp.recipes.ui.theme.SmakolykTheme
 
 @Composable
-@Preview
 fun App() {
     SmakolykTheme {
-        val preferences = remember { UserPreferences() }
-        var onboardingPassed by remember { mutableStateOf(preferences.isOnboardingPassed) }
+        val appViewModel = koinViewModel<AppViewModel>()
+        val backStack = rememberNavBackStack(navSavedStateConfig, appViewModel.startDestination)
 
-        if (onboardingPassed) {
-            HomeScreen(onReplayOnboarding = {
-                preferences.isOnboardingPassed = false
-                onboardingPassed = false
-            })
-        } else {
-            OnboardingScreen(onFinished = {
-                preferences.isOnboardingPassed = true
-                onboardingPassed = true
-            })
-        }
+        NavDisplay(
+            backStack = backStack,
+            onBack = { backStack.removeLastOrNull() },
+            entryDecorators = listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                // gives every destination its own ViewModelStore
+                rememberViewModelStoreNavEntryDecorator(),
+            ),
+            entryProvider = entryProvider {
+                entry<Route.Onboarding> {
+                    OnboardingRoute(
+                        onNavigateToLogin = {
+                            // replace onboarding, so "Back" from login closes the app
+                            backStack.add(Route.Login)
+                            backStack.remove(Route.Onboarding)
+                        },
+                    )
+                }
+                entry<Route.Login> {
+                    LoginRoute()
+                }
+            },
+        )
     }
 }
