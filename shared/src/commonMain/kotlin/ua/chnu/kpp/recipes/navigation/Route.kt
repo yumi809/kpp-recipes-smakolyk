@@ -14,6 +14,9 @@ sealed interface Route : NavKey {
 
     @Serializable
     data object Login : Route
+
+    @Serializable
+    data object Home : Route
 }
 
 /** Non-JVM targets have no reflection, so every key must be registered explicitly. */
@@ -22,6 +25,7 @@ internal val navSavedStateConfig = SavedStateConfiguration {
         polymorphic(NavKey::class) {
             subclass(Route.Onboarding::class, Route.Onboarding.serializer())
             subclass(Route.Login::class, Route.Login.serializer())
+            subclass(Route.Home::class, Route.Home.serializer())
         }
     }
 }

@@ -30,6 +30,25 @@ every lab is a separate commit.
   show/hide password, focus moves to the first invalid field.
 - Unit tests: `LoginValidatorTest`, `OnboardingUseCasesTest`.
 
+## Lab 6 — networking (Ktor), secure tokens (KSafe), auto refresh, auth MVI
+
+- **Ktor** client (`data/remote/HttpClientFactory.kt`): JSON, logging (via Kermit), platform engines
+  (Android / Darwin / CIO).
+- **KSafe** (`data/auth/TokenStorage.kt`): access & refresh tokens are stored encrypted on the device;
+  platform `KSafe` instances in `di/PlatformModule.*.kt`.
+- **Auth network stack**: DTOs (`data/auth/dto`), `AuthApi` (`/auth/login`, `/auth/me`),
+  `RemoteAuthRepository`, domain `AuthRepository` + use cases (`SignInUseCase`, `IsUserSignedInUseCase`,
+  `GetCurrentUserUseCase`, `SignOutUseCase`, `ObserveSessionExpiredUseCase`), `Result` with `map`.
+- **Automatic token refresh**: Ktor `Auth` bearer plugin — on 401 calls `/auth/refresh`, saves the new pair,
+  retries the request; if refresh is rejected the session is cleared and the app returns to login.
+  Access token lifetime is 2 minutes (`ApiConfig`) so the refresh is visible in logs.
+- **Login MVI → use cases**, error handling: failures are mapped to `LoginFailure` and shown in a
+  **snackbar via one-off events** (`LoginEffect.ShowError`).
+- **Home screen** (placeholder) with an authorized `/auth/me` call and *Sign out*.
+- **Navigation logic** takes both flags into account: onboarding → login → home (`AppViewModel`).
+- Tests: `TokenRefreshTest` (Ktor `MockEngine`: refresh + retry, rejected refresh → session cleared).
+- Demo account (dummyjson): `emilys` / `emilyspass`.
+
 ## Run
 
 - Android: `./gradlew :androidApp:assembleDebug` (or Run in Android Studio)

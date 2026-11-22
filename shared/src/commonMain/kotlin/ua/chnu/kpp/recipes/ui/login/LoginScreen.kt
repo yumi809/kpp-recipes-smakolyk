@@ -56,7 +56,11 @@ import ua.chnu.kpp.recipes.resources.error_username_short
 import ua.chnu.kpp.recipes.resources.ic_visibility
 import ua.chnu.kpp.recipes.resources.ic_visibility_off
 import ua.chnu.kpp.recipes.resources.login_demo_hint
-import ua.chnu.kpp.recipes.resources.login_form_valid
+import org.jetbrains.compose.resources.StringResource
+import ua.chnu.kpp.recipes.resources.login_error_credentials
+import ua.chnu.kpp.recipes.resources.login_error_network
+import ua.chnu.kpp.recipes.resources.login_error_server
+import ua.chnu.kpp.recipes.resources.login_error_unknown
 import ua.chnu.kpp.recipes.resources.login_hide_password
 import ua.chnu.kpp.recipes.resources.login_password
 import ua.chnu.kpp.recipes.resources.login_show_password
@@ -69,7 +73,10 @@ import ua.chnu.kpp.recipes.ui.common.CollectEffects
 import ua.chnu.kpp.recipes.ui.theme.SmakolykTheme
 
 @Composable
-fun LoginRoute(viewModel: LoginViewModel = koinViewModel()) {
+fun LoginRoute(
+    onSignedIn: () -> Unit,
+    viewModel: LoginViewModel = koinViewModel(),
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val focus = remember { LoginFocus() }
@@ -77,7 +84,11 @@ fun LoginRoute(viewModel: LoginViewModel = koinViewModel()) {
     CollectEffects(viewModel.effects) { effect ->
         when (effect) {
             is LoginEffect.FocusField -> focus.request(effect.field)
-            LoginEffect.FormAccepted -> snackbarHostState.showSnackbar(getString(Res.string.login_form_valid))
+            LoginEffect.NavigateToHome -> onSignedIn()
+            is LoginEffect.ShowError -> {
+                snackbarHostState.currentSnackbarData?.dismiss()
+                snackbarHostState.showSnackbar(getString(effect.reason.message()))
+            }
         }
     }
 
@@ -230,6 +241,13 @@ internal fun LoginForm(
             modifier = Modifier.fillMaxWidth(),
         )
     }
+}
+
+private fun LoginFailure.message(): StringResource = when (this) {
+    LoginFailure.INVALID_CREDENTIALS -> Res.string.login_error_credentials
+    LoginFailure.NO_CONNECTION -> Res.string.login_error_network
+    LoginFailure.SERVER -> Res.string.login_error_server
+    LoginFailure.UNKNOWN -> Res.string.login_error_unknown
 }
 
 @Composable

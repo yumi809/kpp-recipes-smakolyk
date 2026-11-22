@@ -25,7 +25,17 @@
     <string name="login_hide_password">Приховати пароль</string>
     <string name="login_sign_in">Увійти</string>
     <string name="login_demo_hint">Демо-акаунт: emilys / emilyspass</string>
-    <string name="login_form_valid">Усе правильно! Вхід з’явиться в наступній версії.</string>
+    <string name="login_error_credentials">Неправильне ім’я користувача або пароль</string>
+    <string name="login_error_network">Немає з’єднання з інтернетом. Перевірте його та спробуйте ще раз</string>
+    <string name="login_error_server">Сервер не відповідає. Спробуйте пізніше</string>
+    <string name="login_error_unknown">Щось пішло не так. Спробуйте ще раз</string>
+
+    <!-- Home -->
+    <string name="home_greeting">Привіт, %1$s!</string>
+    <string name="home_subtitle">Рецепти вже скоро з’являться на вашій кухні.</string>
+    <string name="home_sign_out">Вийти</string>
+    <string name="home_retry">Повторити</string>
+    <string name="home_load_error">Не вдалося завантажити профіль</string>
 
     <string name="error_username_empty">Введіть ім’я користувача</string>
     <string name="error_username_short">Ім’я має містити щонайменше %1$d символи</string>

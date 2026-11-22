@@ -25,7 +25,17 @@
     <string name="login_hide_password">Hide password</string>
     <string name="login_sign_in">Sign in</string>
     <string name="login_demo_hint">Demo account: emilys / emilyspass</string>
-    <string name="login_form_valid">Looks good! Signing in comes in the next version.</string>
+    <string name="login_error_credentials">Wrong username or password</string>
+    <string name="login_error_network">No internet connection. Check it and try again</string>
+    <string name="login_error_server">The server is not responding. Please try later</string>
+    <string name="login_error_unknown">Something went wrong. Please try again</string>
+
+    <!-- Home -->
+    <string name="home_greeting">Hello, %1$s!</string>
+    <string name="home_subtitle">Recipes are coming soon to your kitchen.</string>
+    <string name="home_sign_out">Sign out</string>
+    <string name="home_retry">Retry</string>
+    <string name="home_load_error">Could not load your profile</string>
 
     <string name="error_username_empty">Enter your username</string>
     <string name="error_username_short">Username must have at least %1$d characters</string>

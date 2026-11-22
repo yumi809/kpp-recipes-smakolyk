@@ -26,7 +26,11 @@ sealed interface LoginIntent {
 sealed interface LoginEffect {
     /** Moves focus to the field that failed validation. */
     data class FocusField(val field: LoginField) : LoginEffect
-    data object FormAccepted : LoginEffect
+    data object NavigateToHome : LoginEffect
+    /** One-off event rendered as a snackbar. */
+    data class ShowError(val reason: LoginFailure) : LoginEffect
 }
+
+enum class LoginFailure { INVALID_CREDENTIALS, NO_CONNECTION, SERVER, UNKNOWN }
 
 enum class LoginField { USERNAME, PASSWORD }
